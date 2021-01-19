@@ -27,7 +27,7 @@ export default function indexScreen({navigation, route}){
           tx.executeSql(
             "DROP TABLE IF EXISTS notes",
             null,
-            refreshNotes,
+            refreshInfo,
             (txObj, error) => console.log(`Error: ${error}`)
           );
         }, console.log("didn't delete"), console.log("deleted database"));
@@ -49,9 +49,9 @@ export default function indexScreen({navigation, route}){
             console.log(route.params.store)
             console.log(route.params.coffeeBean)
             console.log(route.params.flavor)
-            db.transaction(tx=>{
-                tx.executeSql('INSERT into coffee (store_name, coffee_bean, flavor) VALUES (?,?,?),' 
-                [route.params.store, route.params.coffeeBean, route.params.flavor]);
+            db.transaction((tx)=>{
+                tx.executeSql('INSERT into coffee (store_name, coffee_bean, flavor, rating) VALUES (?,?,?,?)', 
+                [route.params.store, route.params.coffeeBean, route.params.flavor, route.params.rate]);
             }, console.log("database no insert"), refreshInfo)
         } else {
             console.log("Insert not happening")
@@ -66,7 +66,7 @@ export default function indexScreen({navigation, route}){
             </Button>
         ),
         headerLeft:()=>(
-            <Button title="delete" onPress={()=>deleteDatabase}></Button>
+            <Button title="delete" onPress={deleteDatabase}></Button>
         )
         })
     },[])
