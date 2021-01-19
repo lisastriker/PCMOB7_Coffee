@@ -14,6 +14,7 @@ export default function indexScreen({navigation}){
             </Button>
         )})
     },[])
+    
     return(
         <View>
             <Text>Index Screen</Text>
