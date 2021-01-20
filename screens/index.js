@@ -64,6 +64,10 @@ export default function indexScreen({navigation, route}){
             </Button>)})},[])
     
     function renderItem({ item }) {
+      const store1 = item.store_name
+      const coffee1 = item.coffee_bean
+      const flavor1 = item.flavor
+      const rating1 = item.rating
         return (
           <View
             style={{
@@ -75,7 +79,7 @@ export default function indexScreen({navigation, route}){
             }}
           >
             <View style={styles.rows}>
-            <TouchableOpacity style={styles.rowButtonLeft} onPress={()=>navigation.navigate('rank')}>
+            <TouchableOpacity style={styles.rowButtonLeft} onPress={()=>navigation.navigate('rank', {store1, coffee1, rating1, flavor1})}>
               <Text>{item.store_name}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.rowButtonRight} onPress={()=>deleteItem(item.id)}>
@@ -111,6 +115,9 @@ const styles = StyleSheet.create({
       flexDirection:"row"
     },
     rowButtonLeft:{
+      width:"90%",
+      height:"100%",
+      backgroundColor:"orange",
       marginRight:"auto",
       alignContent:"flex-start",
     },    

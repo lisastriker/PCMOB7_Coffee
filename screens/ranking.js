@@ -9,7 +9,10 @@ export default function rankingScreen({navigation, route}){
     return(
         <View>
             <Text>ranking Screen</Text>
-            <Text>{route.params.store}</Text>
+            <Text>{route.params.store1}</Text>
+            <Text>{route.params.coffee1}</Text>
+            <Text>{route.params.rating1}</Text>
+            <Text>{route.params.flavor1}</Text>
         </View>
     )
 
