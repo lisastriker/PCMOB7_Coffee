@@ -11,7 +11,7 @@ export default function App() {
   const Stack = createStackNavigator()
   return ( //You can't put headerLeft inside the indexScreen, so do a useEffect on the screen itself
     <NavigationContainer>
-      <Stack.Navigator mode="modal">
+      <Stack.Navigator>
       <Stack.Screen component={indexScreen} name="index"/> 
       <Stack.Screen component={createScreen} name="create"/>
       <Stack.Screen component={rankScreen} name="rank"/>

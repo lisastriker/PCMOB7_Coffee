@@ -5,10 +5,11 @@ import  {NavigationContainer} from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
 
 
-export default function rankingScreen({navigation}){
+export default function rankingScreen({navigation, route}){
     return(
         <View>
             <Text>ranking Screen</Text>
+            <Text>{route.params.store}</Text>
         </View>
     )
 

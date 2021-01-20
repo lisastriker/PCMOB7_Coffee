@@ -15,6 +15,10 @@ export default function createScreen({navigation}){
     const [coffeeBean, setCoffeeBean] = useState("")
     const [flavor, setFlavor] = useState("")
 
+    function removeInputNavigate(){
+        navigation.navigate('index', {rate, store, coffeeBean, flavor })
+        
+    }
     return(
         <View style={styles.container}> 
             <Text>Create Screen</Text>
@@ -50,8 +54,7 @@ export default function createScreen({navigation}){
             style={{ paddingVertical: 10 }}
             />
             <Text>{rate}</Text>
-            <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('index', {
-                rate, store, coffeeBean, flavor})}>
+            <TouchableOpacity style={styles.button} onPress={()=>removeInputNavigate()}>
             <Text>Submit</Text>
             </TouchableOpacity> 
         </View>
@@ -67,6 +70,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     input:{
+     width:100,
      height: 40, 
      borderColor: 'gray', 
      borderWidth: 1,
