@@ -15,7 +15,7 @@ export default function indexScreen({navigation, route}){
         console.log("inside refreshInfo")
         db.transaction((tx) => {
           tx.executeSql(
-            "SELECT * FROM coffee",
+            "SELECT * FROM coffee GROUP BY store_name",
             null,
             (txObj, { rows: { _array } }) => {console.log(_array), setArrayCoffee(_array)},
             (txObj, error) => console.log(`Error: ${error}`)
@@ -60,7 +60,7 @@ export default function indexScreen({navigation, route}){
     useEffect(()=>{ //Create header
         navigation.setOptions ({
             headerRight:()=>(
-            <Button title="create" onPress={()=>navigation.navigate("create")}>
+            <Button title="Add store" onPress={()=>navigation.navigate("create")}>
             </Button>)})},[])
     
     function renderItem({ item }) {
@@ -69,15 +69,7 @@ export default function indexScreen({navigation, route}){
       const flavor1 = item.flavor
       const rating1 = item.rating
         return (
-          <View
-            style={{
-              padding: 10,
-              paddingTop: 20,
-              paddingBottom: 20,
-              borderBottomColor: "#ccc",
-              borderBottomWidth: 1,
-            }}
-          >
+          <View style={{borderBottomColor:"#ccc", borderBottomWidth:1}}>
             <View style={styles.rows}>
             <TouchableOpacity style={styles.rowButtonLeft} onPress={()=>navigation.navigate('rank', {store1, coffee1, rating1, flavor1})}>
               <Text>{item.store_name}</Text>
@@ -92,7 +84,6 @@ export default function indexScreen({navigation, route}){
 
     return(
         <View style={styles.container}>
-            <Text>Index Screen</Text>
         <FlatList
           data={arrayCoffee}
           renderItem={renderItem}
@@ -112,12 +103,16 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     rows:{
-      flexDirection:"row"
+      alignContent:"center",
+      backgroundColor: "orange",
+      flexDirection:"row",
+      paddingTop:10,
+      paddingBottom:10,
     },
     rowButtonLeft:{
-      width:"90%",
+      paddingLeft:20,
+      width:"100%",
       height:"100%",
-      backgroundColor:"orange",
       marginRight:"auto",
       alignContent:"flex-start",
     },    

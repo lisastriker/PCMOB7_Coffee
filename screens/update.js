@@ -1,40 +1,36 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, FlatList, TouchableOpacity } from 'react-native';
 import  {NavigationContainer} from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
+import { useEffect, useState } from 'react';
+import * as SQLite from 'expo-sqlite';
+import { Ionicons } from "@expo/vector-icons";
 import {Rating} from 'react-native-ratings'
-import { useState, useEffect } from 'react';
-
-
-
 const COFFEE_IMAGE = require('../assets/coffee_bean.png')
-export default function createScreen({navigation, route}){
+const db = SQLite.openDatabase("db.db");
+export default function updateScreen({navigation, route}){
     const [rate, setRate] = useState()
     const [store, setStore] = useState("")
     const [coffeeBean, setCoffeeBean] = useState("")
     const [flavor, setFlavor] = useState("")
-    const receiveStore = route.params?.storeName
-    function removeInputNavigate(){
-        navigation.navigate('index', {rate, store, coffeeBean, flavor })
-        
+    const storeName = route.params.storeName
+   function update(){
+            db.transaction((tx)=>{
+                tx.executeSql(`UPDATE coffee set coffee_bean='${coffeeBean}' WHERE store_name='${storeName}'`)
+        }, console.log("database no update"),navigation.navigate('rank'))
     }
+    //UPDATE coffee set store_name='${store}'
+    //UPDATE coffee set store_name=? coffee_bean=? flavor=? rating=?', 
+    // [route.params.store, route.params.coffeeBean, route.params.flavor, route.params.rate]);
     return(
         <View style={styles.container}> 
             <Text>Create Screen</Text>
-            {receiveStore ?            
-             <TextInput 
-            style={styles.input}
-            placeholder="Shop name" 
-            value={receiveStore}
-            onChangeText={text=>setStore(text)}
-            />  :
             <TextInput 
             style={styles.input}
             placeholder="Shop name"
             value={store} 
             onChangeText={text=>setStore(text)}
-            />  }  
+            />  
             <TextInput 
             style={styles.input} 
             placeholder="Coffee Bean Type" 
@@ -62,13 +58,13 @@ export default function createScreen({navigation, route}){
             />
             <Text>{rate}</Text>
             <View style={styles.shadow}>
-            <TouchableOpacity style={styles.button} onPress={()=>removeInputNavigate()}>
+            <TouchableOpacity style={styles.button} onPress={()=>update()}>
             <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity> 
             </View>
         </View>
-    )
 
+    )
 }
 
 const styles = StyleSheet.create({
