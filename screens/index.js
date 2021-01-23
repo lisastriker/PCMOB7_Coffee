@@ -44,14 +44,16 @@ export default function indexScreen({navigation, route}){
         }, null, refreshInfo);
       }, []);
 
-    useEffect(()=>{ //Insert into database
+    useEffect(()=>{ //Insert into database. If data comes from new store or comes from specific store
         console.log("Watching params")
+        console.log(route.params?.store)
         if(route.params?.store){
             db.transaction((tx)=>{
                 tx.executeSql('INSERT into coffee (store_name, coffee_bean, flavor, rating) VALUES (?,?,?,?)', 
                 [route.params.store, route.params.coffeeBean, route.params.flavor, route.params.rate]);
             }, console.log("database no insert"), refreshInfo)
-        } else {
+        }
+        else {
             console.log("Insert not happening")
         }
     }, [route.params?.store])

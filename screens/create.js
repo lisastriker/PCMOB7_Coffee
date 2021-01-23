@@ -15,9 +15,14 @@ export default function createScreen({navigation, route}){
     const [coffeeBean, setCoffeeBean] = useState("")
     const [flavor, setFlavor] = useState("")
     const receiveStore = route.params?.storeName
-    function removeInputNavigate(){
+    console.log(receiveStore)
+    function navigateFromScratch(){
         navigation.navigate('index', {rate, store, coffeeBean, flavor })
         
+    }
+
+    function navigateFromStore(){
+        navigation.navigate('rank', {receiveStore, coffeeBean, rate, flavor})
     }
     return(
         <View style={styles.container}> 
@@ -62,7 +67,9 @@ export default function createScreen({navigation, route}){
             />
             <Text>{rate}</Text>
             <View style={styles.shadow}>
-            <TouchableOpacity style={styles.button} onPress={()=>removeInputNavigate()}>
+            <TouchableOpacity style={styles.button} onPress={receiveStore? ()=>{navigateFromStore() 
+                    console.log("store")}: ()=>{navigateFromScratch() 
+                        console.log("scratch")}}>
             <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity> 
             </View>

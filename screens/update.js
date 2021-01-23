@@ -9,28 +9,25 @@ import {Rating} from 'react-native-ratings'
 const COFFEE_IMAGE = require('../assets/coffee_bean.png')
 const db = SQLite.openDatabase("db.db");
 export default function updateScreen({navigation, route}){
-    const [rate, setRate] = useState()
+    const [rate, setRate] = useState(route.params?.rating1)
     const [store, setStore] = useState("")
-    const [coffeeBean, setCoffeeBean] = useState("")
-    const [flavor, setFlavor] = useState("")
-    const storeName = route.params.storeName
+    const [coffeeBean, setCoffeeBean] = useState(route.params?.coffeeBean1)
+    const [flavor, setFlavor] = useState(route.params?.flavor1)
+    const storeName1 = route.params.storeName1 //All these variable come from update. ranking screen
+    const id1 = route.params.id1
    function update(){
             db.transaction((tx)=>{
-                tx.executeSql(`UPDATE coffee set coffee_bean='${coffeeBean}' WHERE store_name='${storeName}'`)
-        }, console.log("database no update"),navigation.navigate('rank'))
+                console.log('inside update statement')
+                tx.executeSql(`UPDATE coffee set coffee_bean='${coffeeBean}', flavor='${flavor}', rating='${rate}' WHERE 
+                id=${id1}`)
+        }, console.log("database no update"), navigation.goBack())
     }
-    //UPDATE coffee set store_name='${store}'
-    //UPDATE coffee set store_name=? coffee_bean=? flavor=? rating=?', 
-    // [route.params.store, route.params.coffeeBean, route.params.flavor, route.params.rate]);
+    //store_name='${storeName1}' AND coffee_bean='${coffeeBean1}' AND flavor='${flavor1}' AND rating=${rating1}
+    
     return(
         <View style={styles.container}> 
-            <Text>Create Screen</Text>
-            <TextInput 
-            style={styles.input}
-            placeholder="Shop name"
-            value={store} 
-            onChangeText={text=>setStore(text)}
-            />  
+            <Text>Update Screen</Text>
+            <Text style={styles.textInBox}>{storeName1}</Text>
             <TextInput 
             style={styles.input} 
             placeholder="Coffee Bean Type" 
@@ -59,7 +56,7 @@ export default function updateScreen({navigation, route}){
             <Text>{rate}</Text>
             <View style={styles.shadow}>
             <TouchableOpacity style={styles.button} onPress={()=>update()}>
-            <Text style={styles.buttonText}>Submit</Text>
+            <Text style={styles.buttonText}>Update</Text>
             </TouchableOpacity> 
             </View>
         </View>
@@ -95,6 +92,17 @@ const styles = StyleSheet.create({
     },
     shadow:{
         elevation:5
+    },
+    textInBox:{
+        width:"70%",
+        paddingLeft:10,
+        height: 40, 
+        borderColor: 'gray', 
+        borderWidth: 1,
+        textAlign:"left",
+        textAlignVertical:"center",
+        backgroundColor:"#ccc",
+        
     }
 
   });
