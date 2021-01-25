@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { FlatList, StyleSheet, Text, View, Button} from 'react-native';
+import { FlatList, StyleSheet, Text, View, Button, Image} from 'react-native';
 import  {NavigationContainer, useIsFocused} from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
 import * as SQLite from 'expo-sqlite';
@@ -68,6 +68,7 @@ export default function rankingScreen({navigation, route}){
     }
     return(
         <View >
+            <Image style={styles.headerPicture} source={require('../assets/coffee_cup.png')}></Image>
             <FlatList
             data={arrayCoffee}
             renderItem={renderItem}
@@ -86,6 +87,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
       },
+    headerPicture:{
+      width:200,
+      height:100,
+      alignItems:"flex-start",
+    },
       itemView:{
         flexWrap:"wrap",
         flex: 1,

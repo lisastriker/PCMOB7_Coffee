@@ -1,16 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, Button, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, FlatList, TouchableOpacity, Image } from 'react-native';
 import  {NavigationContainer} from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
 import { useEffect, useState } from 'react';
+import {AppLoading} from 'expo-app-loading'
 import * as SQLite from 'expo-sqlite';
 import { Ionicons } from "@expo/vector-icons";
+import { useFonts, Lobster_400Regular } from '@expo-google-fonts/lobster'
 
 const db = SQLite.openDatabase("db.db");
 
 export default function indexScreen({navigation, route}){
-    const [arrayCoffee, setArrayCoffee] = useState([])
+ 
+    let [fontsLoaded] = useFonts({
+    Lobster_400Regular,
+  }) 
+  const [arrayCoffee, setArrayCoffee] = useState([])
     function refreshInfo() {
         console.log("inside refreshInfo")
         db.transaction((tx) => {
@@ -71,45 +77,53 @@ export default function indexScreen({navigation, route}){
       const flavor1 = item.flavor
       const rating1 = item.rating
         return (
-          <View style={{borderBottomColor:"#ccc", borderBottomWidth:1}}>
+          <View style={styles.itemView}>
             <View style={styles.rows}>
             <TouchableOpacity style={styles.rowButtonLeft} onPress={()=>navigation.navigate('rank', {store1, coffee1, rating1, flavor1})}>
-              <Text>{item.store_name}</Text>
+              <Text style={{fontSize:15}}>{item.store_name}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.rowButtonRight} onPress={()=>deleteItem(item.id)}>
-              <Ionicons name="trash" size={16} color="#944" />
+              <Ionicons name="trash" size={16} color="#ccc" />
               </TouchableOpacity>
             </View>
           </View>
         );
       }
-
-    return(
-        <View style={styles.container}>
-        <FlatList
-          data={arrayCoffee}
-          renderItem={renderItem}
-          style={{ width: "100%" }}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      </View>
-    )
+    
+    if(!fontsLoaded){
+        return <AppLoading />
+      }
+    else{
+      return(
+          <View style={styles.container}>
+          <View style={styles.headerContainer}>
+          <Image style={styles.headerPicture} source={require('../assets/coffee_cup.png')}></Image>
+          <Text style={styles.headerText}>Coffee Adventures</Text>
+          </View>
+          <FlatList
+            data={arrayCoffee}
+            renderItem={renderItem}
+            style={{ width: "100%" }}
+            keyExtractor={(item) => item.id.toString()}
+          />
+        </View>
+      )
+    }
+    
 
 }
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+      backgroundColor: '#F5F5F7',
     },
     rows:{
       alignContent:"center",
-      backgroundColor: "orange",
       flexDirection:"row",
-      paddingTop:10,
-      paddingBottom:10,
+      paddingTop:8,
+      paddingBottom:8,
+      marginBottom:3,
     },
     rowButtonLeft:{
       paddingLeft:20,
@@ -120,6 +134,31 @@ const styles = StyleSheet.create({
     },    
     rowButtonRight:{
       marginLeft:"auto",
-      alignContent:"flex-end"
-    }
+      alignContent:"flex-end",
+      marginRight:15,
+    },
+    headerPicture:{
+      width:200,
+      height:100,
+      alignItems:"flex-start",
+      paddingLeft:0,
+    },
+    headerText:{
+      fontFamily:"Lobster_400Regular",
+      textAlignVertical:"center",
+      fontSize:20,
+      marginLeft:-15
+    },
+    headerContainer:{
+      flexDirection:"row",
+    },
+    itemView:{
+    flexWrap:"wrap",
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'flex-start',
+    borderBottomWidth:0.5,
+    borderBottomColor:"#eee",
+  },
 });
+
